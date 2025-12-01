@@ -1,5 +1,7 @@
 const API_BASE = "https://scorebot-bc8z.onrender.com";
 const PREDICT_ENDPOINT = "/predict"; // change if your route is different
+const BACKEND_URL = "https://scorebot-bc8z.onrender.com";
+
 
 const TEAMS = [
   "ARI",
