@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ScoreBot</title>
+</head>
+<body>
+  <h1>ScoreBot</h1>
+
+  <label>Start Season:
+    <input type="number" id="start_season" value="2018" />
+  </label>
+  <br><br>
+
+  <label>End Season:
+    <input type="number" id="end_season" value="2024" />
+  </label>
+  <br><br>
+
+  <label>Home Team:
+    <input type="text" id="home_team" value="KC" />
+  </label>
+  <br><br>
+
+  <label>Away Team:
+    <input type="text" id="away_team" value="DAL" />
+  </label>
+  <br><br>
+
+  <label>Model:
+    <select id="model_type">
+      <option value="linear">Linear (speed / baseline)</option>
+      <option value="gboost">Gradient Boosting – LightGBM (sports betting / strongest edge)</option>
+      <option value="rf">Random Forest (robust / balanced)</option>
+    </select>
+  </label>
+  <br><br>
+
+  <button id="btn">Predict</button>
+
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById("btn").onclick = async () => {
+      const start_season = parseInt(document.getElementById("start_season").value, 10);
+      const end_season = parseInt(document.getElementById("end_season").value, 10);
+      const home_team = document.getElementById("home_team").value;
+      const away_team = document.getElementById("away_team").value;
+      const model_type = document.getElementById("model_type").value;
+
+      const payload = { start_season, end_season, home_team, away_team, model_type };
+
+      const res = await fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    };
+  </script>
+</body>
+</html>
