@@ -1,13 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, field_validator
+
 from backend.predictor import predict_matchup
+
 
 app = FastAPI()
 
+# CORS so you can hit this from any frontend (or directly in the browser)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],          # tighten later if you want
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,11 +41,13 @@ class PredictRequest(BaseModel):
         return v
 
 
-@app.get("/")
-def root():
+# Health check / status endpoint (JSON)
+@app.get("/api/health")
+def health():
     return {"status": "ok", "message": "ScoreBot backend running"}
 
 
+# Prediction endpoint used by the UI
 @app.post("/predict")
 def predict(req: PredictRequest):
     try:
@@ -55,3 +61,8 @@ def predict(req: PredictRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return result
+
+
+# Serve the frontend (index.html, script.js, style.css) from the "frontend" folder.
+# Make sure you have: frontend/index.html, frontend/script.js, frontend/style.css
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
