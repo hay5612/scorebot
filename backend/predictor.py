@@ -14,7 +14,7 @@ MODEL_FILES = {
         "win": MODEL_DIR / "linear_win.pkl",
         "diff": MODEL_DIR / "linear_diff.pkl",
     },
-    "gboost": {  # LightGBM gradient boosting
+    "gboost": {
         "win": MODEL_DIR / "lgbm_win.pkl",
         "diff": MODEL_DIR / "lgbm_diff.pkl",
     },

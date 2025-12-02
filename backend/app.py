@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------------- Request Model ----------------------
+# request model
 class PredictRequest(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
@@ -32,7 +32,7 @@ class PredictRequest(BaseModel):
     end_season: int
 
     model_type: str = "linear"
-    neutral_field: bool = False  # Currently unused, but accepted
+    neutral_field: bool = False # not used, but accepted
 
     @field_validator("start_season", "end_season")
     @classmethod
@@ -50,7 +50,7 @@ class PredictRequest(BaseModel):
         return v
 
 
-# ---------------------- Serve Frontend ----------------------
+# serve frontend
 @app.get("/", response_class=HTMLResponse)
 async def serve_index():
     return FileResponse(FRONTEND_DIR / "index.html")
@@ -66,7 +66,7 @@ async def serve_js():
     return FileResponse(FRONTEND_DIR / "script.js")
 
 
-# ---------------------- API ----------------------
+# api
 @app.post("/predict")
 def predict(req: PredictRequest):
 

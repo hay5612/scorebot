@@ -84,7 +84,7 @@ def train_models():
         X, y_diff, test_size=0.2, shuffle=True, random_state=42
     )
 
-    # ---------- LINEAR MODELS (speed / baseline) ----------
+    # linear models (speed / baseline)
     linear_win = Pipeline(
         [
             ("impute", SimpleImputer(strategy="mean")),
@@ -110,7 +110,7 @@ def train_models():
     diff_r2_linear = linear_diff.score(X_test_d, y_test_d)
     print(f"[LINEAR] Diff R^2: {diff_r2_linear:.4f}")
 
-    # ---------- LIGHTGBM MODELS (gradient boosting, best for sharp accuracy / betting) ----------
+    # lightgbm models (gradient boosting / betting)
     lgbm_win = Pipeline(
         [
             ("impute", SimpleImputer(strategy="mean")),
@@ -148,7 +148,7 @@ def train_models():
     diff_r2_lgbm = lgbm_diff.score(X_test_d, y_test_d)
     print(f"[LGBM] Diff R^2: {diff_r2_lgbm:.4f}")
 
-    # ---------- RANDOM FOREST MODELS (robust general-purpose) ----------
+    # random forest models (general)
     rf_win = Pipeline(
         [
             ("impute", SimpleImputer(strategy="mean")),
@@ -186,7 +186,7 @@ def train_models():
     diff_r2_rf = rf_diff.score(X_test_d, y_test_d)
     print(f"[RF] Diff R^2: {diff_r2_rf:.4f}")
 
-    # save models + feature metadata
+    # save models & feature metadata
     joblib.dump(linear_win, MODEL_DIR / "linear_win.pkl")
     joblib.dump(linear_diff, MODEL_DIR / "linear_diff.pkl")
     joblib.dump(lgbm_win, MODEL_DIR / "lgbm_win.pkl")

@@ -6,63 +6,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <div class="app">
     <header class="header">
       <h1>ScoreBot</h1>
-      <p>Predict NFL game outcomes using machine learning.</p>
+      <p>Predict NFL game scores using machine learning.</p>
     </header>
 
     <main class="main">
       <section class="card">
         <h2>Prediction Input</h2>
-
         <form id="prediction-form">
-
           <div class="field-row">
             <div class="field">
               <label for="home-team">Home Team</label>
-              <select id="home-team" required></select>
+              <select id="home-team" name="home_team" required></select>
             </div>
 
             <div class="field">
               <label for="away-team">Away Team</label>
-              <select id="away-team" required></select>
+              <select id="away-team" name="away_team" required></select>
             </div>
           </div>
 
           <div class="field-row">
             <div class="field">
               <label for="start-season">Start Season</label>
-              <input type="number" id="start-season" min="2000" max="2100" value="2020" required />
+              <input
+                type="number"
+                id="start-season"
+                name="start_season"
+                min="2000"
+                max="2100"
+                value="2020"
+                required
+              />
             </div>
 
             <div class="field">
               <label for="end-season">End Season</label>
-              <input type="number" id="end-season" min="2000" max="2100" value="2024" required />
+              <input
+                type="number"
+                id="end-season"
+                name="end_season"
+                min="2000"
+                max="2100"
+                value="2024"
+                required
+              />
             </div>
           </div>
 
           <div class="field-row">
             <div class="field">
               <label for="model-type">Model</label>
-              <select id="model-type">
-                <option value="linear">Linear Regression (fast)</option>
-                <option value="gboost">Gradient Boosting (sports betting)</option>
-                <option value="rf">Random Forest (balanced)</option>
+              <select id="model-type" name="model_type">
+                <option value="linear">Linear Regression (Speed)</option>
+                <option value="gboost">Gradient Boosting (Sports Betting)</option>
+                <option value="rf">Random Forest (Balanced)</option>
               </select>
+            </div>
+
+            <div class="field checkbox-field">
+              <label>
+                <input type="checkbox" id="neutral-field" name="neutral_field" />
+                Neutral site game
+              </label>
             </div>
           </div>
 
           <button type="submit" id="submit-btn">Get Prediction</button>
-
         </form>
       </section>
 
-      <section class="card">
+      <section class="card" id="results-card">
         <h2>Prediction Result</h2>
-
         <div id="status"></div>
 
         <div id="score-display" class="score-display hidden">
@@ -70,25 +88,24 @@
             <span id="home-label" class="team-name"></span>
             <span id="home-score" class="team-score"></span>
           </div>
-
           <div class="team-line">
             <span id="away-label" class="team-name"></span>
             <span id="away-score" class="team-score"></span>
           </div>
 
           <div id="extra-info" class="extra-info"></div>
+          <div id="point-diff" class="extra-info"></div>
         </div>
 
         <details class="raw-json">
           <summary>Raw response</summary>
           <pre id="raw-json"></pre>
         </details>
-
       </section>
     </main>
 
     <footer class="footer">
-      <small>Backend: <code>https://scorebot-bc8z.onrender.com</code></small>
+      <small></small>
     </footer>
   </div>
 
