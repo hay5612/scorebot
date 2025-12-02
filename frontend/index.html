@@ -7,12 +7,12 @@
 </head>
 <body>
 
-<h1 class="title">ScoreBot</h1>
+<h1>ScoreBot</h1>
 <p class="subtitle">Predict NFL game scores using your deployed model.</p>
 
 <div class="container">
 
-    <div class="input-panel">
+    <div class="panel">
         <h2>Prediction Input</h2>
 
         <label>Home Team</label>
@@ -29,30 +29,31 @@
 
         <label>Model</label>
         <select id="modelType">
-            <option value="linear">(default) Linear Regression</option>
-            <option value="gboost">LightGBM (sports betting)</option>
-            <option value="rf">Random Forest (balanced)</option>
+            <option value="linear">(default)</option>
+            <option value="gboost">Gradient Boosting (LightGBM)</option>
+            <option value="rf">Random Forest</option>
         </select>
 
-        <div class="neutral-field-box">
+        <label class="checkbox">
             <input type="checkbox" id="neutralField">
-            <label for="neutralField">Neutral site game</label>
-        </div>
+            Neutral site game
+        </label>
 
         <button id="predictBtn">Get Prediction</button>
     </div>
 
-
-    <div class="output-panel">
+    <div class="panel">
         <h2>Prediction Result</h2>
-        <pre id="resultBox">Raw response</pre>
+        <pre id="resultBox">► Raw response</pre>
     </div>
+
 </div>
 
-<p class="footer">
-    Backend: https://scorebot-bc8z.onrender.com
-</p>
+<div class="footer">
+    Backend: <a href="https://scorebot-bc8z.onrender.com">https://scorebot-bc8z.onrender.com</a>
+</div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
