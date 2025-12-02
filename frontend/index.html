@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="app">
     <header class="header">
@@ -16,6 +17,7 @@
     <main class="main">
       <section class="card">
         <h2>Prediction Input</h2>
+
         <form id="prediction-form">
           <div class="field-row">
             <div class="field">
@@ -32,28 +34,12 @@
           <div class="field-row">
             <div class="field">
               <label for="start-season">Start Season</label>
-              <input
-                type="number"
-                id="start-season"
-                name="start_season"
-                min="2018"
-                max="2024"
-                value="2020"
-                required
-              />
+              <input type="number" id="start-season" name="start_season" min="2000" max="2100" value="2018" required />
             </div>
 
             <div class="field">
               <label for="end-season">End Season</label>
-              <input
-                type="number"
-                id="end-season"
-                name="end_season"
-                min="2018"
-                max="2024"
-                value="2024"
-                required
-              />
+              <input type="number" id="end-season" name="end_season" min="2000" max="2100" value="2024" required />
             </div>
           </div>
 
@@ -62,16 +48,9 @@
               <label for="model-type">Model</label>
               <select id="model-type" name="model_type">
                 <option value="linear">Linear Regression (Speed)</option>
-                <option value="gboost">Gradient Boosting (Sports Betting)</option>
-                <option value="rf">Random Forest (Balanced)</option>
+                <option value="gboost">Gradient Boosting</option>
+                <option value="rf">Random Forest</option>
               </select>
-            </div>
-
-            <div class="field checkbox-field">
-              <label>
-                <input type="checkbox" id="neutral-field" name="neutral_field" />
-                Neutral site game
-              </label>
             </div>
           </div>
 
@@ -81,6 +60,7 @@
 
       <section class="card" id="results-card">
         <h2>Prediction Result</h2>
+
         <div id="status"></div>
 
         <div id="score-display" class="score-display hidden">
@@ -88,6 +68,7 @@
             <span id="home-label" class="team-name"></span>
             <span id="home-score" class="team-score"></span>
           </div>
+
           <div class="team-line">
             <span id="away-label" class="team-name"></span>
             <span id="away-score" class="team-score"></span>

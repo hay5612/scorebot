@@ -1,12 +1,10 @@
 const API_BASE = "https://scorebot-bc8z.onrender.com";
 const PREDICT_ENDPOINT = "/predict";
-const BACKEND_URL = "https://scorebot-bc8z.onrender.com";
 
 const TEAMS = [
-  "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
-  "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC",
-  "LV", "LAC", "LAR", "MIA", "MIN", "NE", "NO", "NYG",
-  "NYJ", "PHI", "PIT", "SEA", "SF", "TB", "TEN", "WAS",
+  "ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB",
+  "HOU","IND","JAX","KC","LV","LAC","LAR","MIA","MIN","NE","NO","NYG","NYJ",
+  "PHI","PIT","SEA","SF","TB","TEN","WAS"
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,26 +23,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const pointDiffEl = document.getElementById("point-diff");
   const rawJson = document.getElementById("raw-json");
 
-  // populate dropdown menus
+  // Populate dropdowns
   TEAMS.forEach((abbr) => {
-    const makeOption = () => {
-      const opt = document.createElement("option");
-      opt.value = opt.textContent = abbr;
-      return opt;
-    };
-    homeSelect.appendChild(makeOption());
-    awaySelect.appendChild(makeOption());
+    let opt1 = document.createElement("option");
+    opt1.value = abbr;
+    opt1.textContent = abbr;
+    homeSelect.appendChild(opt1);
+
+    let opt2 = document.createElement("option");
+    opt2.value = abbr;
+    opt2.textContent = abbr;
+    awaySelect.appendChild(opt2);
   });
 
   homeSelect.value = "KC";
   awaySelect.value = "BUF";
 
-  // form submit handler
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     statusEl.textContent = "";
-    statusEl.className = "";
     scoreCard.classList.add("hidden");
     extraInfo.textContent = "";
     pointDiffEl.textContent = "";
@@ -53,17 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const payload = {
       home_team: homeSelect.value,
       away_team: awaySelect.value,
-      start_season: parseInt(document.getElementById("start-season").value, 10),
-      end_season: parseInt(document.getElementById("end-season").value, 10),
-      model_type: document.getElementById("model-type").value,
-      neutral_field: document.getElementById("neutral-field").checked,
+      start_season: parseInt(document.getElementById("start-season").value),
+      end_season: parseInt(document.getElementById("end-season").value),
+      model_type: document.getElementById("model-type").value
     };
-
-    if (payload.home_team === payload.away_team) {
-      statusEl.textContent = "Home and away teams must be different.";
-      statusEl.className = "status-error";
-      return;
-    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Predicting...";
@@ -75,7 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
 
       const data = await res.json();
       rawJson.textContent = JSON.stringify(data, null, 2);
@@ -83,21 +75,23 @@ document.addEventListener("DOMContentLoaded", () => {
       homeLabel.textContent = `${payload.home_team} (Home)`;
       awayLabel.textContent = `${payload.away_team} (Away)`;
 
-      // win probability
-      const winProb = data.home_win_probability ?? null;
-      if (winProb !== null) {
+      // win prob
+      const winProb = data.home_win_probability;
+      if (winProb !== undefined) {
         extraInfo.textContent = `Home win probability: ${(winProb * 100).toFixed(1)}%`;
       }
 
-      // point difference
+      // point diff
       if (data.predicted_point_diff !== undefined) {
         const diff = data.predicted_point_diff.toFixed(1);
-        pointDiffEl.textContent = `Predicted point differential: ${diff}`;
+        pointDiffEl.textContent = `Predicted point difference: ${diff}`;
       }
 
-      statusEl.textContent = "Prediction ready.";
-      statusEl.className = "status-ok";
       scoreCard.classList.remove("hidden");
+
+      statusEl.textContent = "Prediction received.";
+      statusEl.className = "status-ok";
+
     } catch (err) {
       statusEl.textContent = "Error contacting API: " + err.message;
       statusEl.className = "status-error";
