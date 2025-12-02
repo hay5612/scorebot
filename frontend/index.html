@@ -1,118 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>ScoreBot – NFL Score Prediction</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="app">
-    <header class="header">
-      <h1>ScoreBot</h1>
-      <p>Predict NFL game scores using your deployed model.</p>
-    </header>
+<div class="input-group">
+    <label>Home Team</label>
+    <select id="home-team"></select>
 
-    <main class="main">
-      <section class="card">
-        <h2>Prediction Input</h2>
-        <form id="prediction-form">
-          <div class="field-row">
-            <div class="field">
-              <label for="home-team">Home Team</label>
-              <select id="home-team" name="home_team" required></select>
-            </div>
+    <label>Away Team</label>
+    <select id="away-team"></select>
 
-            <div class="field">
-              <label for="away-team">Away Team</label>
-              <select id="away-team" name="away_team" required></select>
-            </div>
-          </div>
+    <label>Start Season</label>
+    <input type="number" id="start-season" value="2018">
 
-          <div class="field-row">
-            <div class="field">
-              <label for="season">Season</label>
-              <input
-                type="number"
-                id="season"
-                name="season"
-                min="2000"
-                max="2100"
-                value="2024"
-                required
-              />
-            </div>
+    <label>End Season</label>
+    <input type="number" id="end-season" value="2024">
 
-            <div class="field">
-              <label for="week">Week</label>
-              <input
-                type="number"
-                id="week"
-                name="week"
-                min="1"
-                max="22"
-                value="1"
-                required
-              />
-            </div>
-          </div>
+    <label>Model Type</label>
+    <select id="model-type">
+        <option value="linear">Linear Regression (Fast)</option>
+        <option value="gboost">Gradient Boosting (Sports Betting)</option>
+        <option value="rf">Random Forest (Balanced)</option>
+    </select>
 
-          <div class="field-row">
-            <div class="field">
-              <label for="model-type">Model</label>
-              <select id="model-type" name="model_type">
-                <option value="">(default)</option>
-                <option value="lightgbm">LightGBM</option>
-                <option value="baseline">Baseline</option>
-              </select>
-            </div>
+    <label>
+        <input type="checkbox" id="neutral-site">
+        Neutral Site Game
+    </label>
 
-            <div class="field checkbox-field">
-              <label>
-                <input
-                  type="checkbox"
-                  id="neutral-field"
-                  name="neutral_field"
-                />
-                Neutral site game
-              </label>
-            </div>
-          </div>
+    <button id="predict-btn">Predict Game</button>
+</div>
 
-          <!-- If your API needs anything else (e.g., spread, total),
-               you can add more fields here. -->
-
-          <button type="submit" id="submit-btn">Get Prediction</button>
-        </form>
-      </section>
-
-      <section class="card" id="results-card">
-        <h2>Prediction Result</h2>
-        <div id="status"></div>
-        <div id="score-display" class="score-display hidden">
-          <div class="team-line">
-            <span id="home-label" class="team-name"></span>
-            <span id="home-score" class="team-score"></span>
-          </div>
-          <div class="team-line">
-            <span id="away-label" class="team-name"></span>
-            <span id="away-score" class="team-score"></span>
-          </div>
-          <div id="extra-info" class="extra-info"></div>
-        </div>
-
-        <details class="raw-json">
-          <summary>Raw response</summary>
-          <pre id="raw-json"></pre>
-        </details>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <small>Backend: <code>https://scorebot-bc8z.onrender.com</code></small>
-    </footer>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<div id="result-box"></div>
