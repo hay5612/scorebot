@@ -1,29 +1,58 @@
-<div class="input-group">
-    <label>Home Team</label>
-    <select id="home-team"></select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ScoreBot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <label>Away Team</label>
-    <select id="away-team"></select>
+<h1 class="title">ScoreBot</h1>
+<p class="subtitle">Predict NFL game scores using your deployed model.</p>
 
-    <label>Start Season</label>
-    <input type="number" id="start-season" value="2018">
+<div class="container">
 
-    <label>End Season</label>
-    <input type="number" id="end-season" value="2024">
+    <div class="input-panel">
+        <h2>Prediction Input</h2>
 
-    <label>Model Type</label>
-    <select id="model-type">
-        <option value="linear">Linear Regression (Fast)</option>
-        <option value="gboost">Gradient Boosting (Sports Betting)</option>
-        <option value="rf">Random Forest (Balanced)</option>
-    </select>
+        <label>Home Team</label>
+        <select id="homeTeam"></select>
 
-    <label>
-        <input type="checkbox" id="neutral-site">
-        Neutral Site Game
-    </label>
+        <label>Away Team</label>
+        <select id="awayTeam"></select>
 
-    <button id="predict-btn">Predict Game</button>
+        <label>Season</label>
+        <input type="number" id="season" value="2024">
+
+        <label>Week</label>
+        <input type="number" id="week" value="1">
+
+        <label>Model</label>
+        <select id="modelType">
+            <option value="linear">(default) Linear Regression</option>
+            <option value="gboost">LightGBM (sports betting)</option>
+            <option value="rf">Random Forest (balanced)</option>
+        </select>
+
+        <div class="neutral-field-box">
+            <input type="checkbox" id="neutralField">
+            <label for="neutralField">Neutral site game</label>
+        </div>
+
+        <button id="predictBtn">Get Prediction</button>
+    </div>
+
+
+    <div class="output-panel">
+        <h2>Prediction Result</h2>
+        <pre id="resultBox">Raw response</pre>
+    </div>
 </div>
 
-<div id="result-box"></div>
+<p class="footer">
+    Backend: https://scorebot-bc8z.onrender.com
+</p>
+
+<script src="script.js"></script>
+</body>
+</html>

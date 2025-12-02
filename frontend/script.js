@@ -1,27 +1,54 @@
-<script>
-document.getElementById("predict-btn").addEventListener("click", async () => {
+const API_BASE = "https://scorebot-bc8z.onrender.com";
 
+const teams = [
+    "ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB",
+    "HOU","IND","JAX","KC","LV","LAC","LAR","MIA","MIN","NE","NO","NYG","NYJ",
+    "PHI","PIT","SEA","SF","TB","TEN","WAS"
+];
+
+function fillTeamDropdown(id) {
+    const sel = document.getElementById(id);
+    teams.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        sel.appendChild(opt);
+    });
+}
+
+fillTeamDropdown("homeTeam");
+fillTeamDropdown("awayTeam");
+
+document.getElementById("predictBtn").addEventListener("click", async () => {
     const payload = {
-        home_team: document.getElementById("home-team").value,
-        away_team: document.getElementById("away-team").value,
-        start_season: parseInt(document.getElementById("start-season").value),
-        end_season: parseInt(document.getElementById("end-season").value),
-        model_type: document.getElementById("model-type").value,
-        neutral_site: document.getElementById("neutral-site").checked
+        home_team: document.getElementById("homeTeam").value,
+        away_team: document.getElementById("awayTeam").value,
+        season: parseInt(document.getElementById("season").value),
+        week: parseInt(document.getElementById("week").value),
+        model_type: document.getElementById("modelType").value,
+        neutral_field: document.getElementById("neutralField").checked
     };
 
-    const response = await fetch("https://YOUR_RENDER_BACKEND_URL/predict", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
-    });
+    const resultBox = document.getElementById("resultBox");
+    resultBox.textContent = "Loading...";
 
-    const data = await response.json();
+    try {
+        const response = await fetch(`${API_BASE}/predict`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        });
 
-    document.getElementById("result-box").innerHTML = `
-        <h3>Prediction:</h3>
-        <p><strong>Winner:</strong> ${data.winner}</p>
-        <p><strong>Spread:</strong> ${data.spread.toFixed(2)}</p>
-    `;
+        if (!response.ok) {
+            const err = await response.json();
+            resultBox.textContent = "Error: " + JSON.stringify(err, null, 2);
+            return;
+        }
+
+        const data = await response.json();
+        resultBox.textContent = JSON.stringify(data, null, 2);
+
+    } catch (err) {
+        resultBox.textContent = "Network error: " + err;
+    }
 });
-</script>
