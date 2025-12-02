@@ -30,9 +30,9 @@ app.add_middleware(
 
 # ------------------------------------------------------------------
 # Request model for /predict
-#   Designed to work with both old and new frontends:
 #   - supports season OR start_season/end_season
-#   - ignores extra fields like week, neutral flag, etc.
+#   - ignores extra fields like week, neutral_field, etc.
+#   - maps frontend model_type values to backend models
 # ------------------------------------------------------------------
 class PredictRequest(BaseModel):
     model_config = ConfigDict(extra="ignore")  # ignore unknown fields
@@ -46,8 +46,9 @@ class PredictRequest(BaseModel):
     start_season: int | None = None
     end_season: int | None = None
 
-    model_type: str | None = "linear"  # "linear", "gboost", or "rf"
-    neutral_field: bool = False
+    # Frontend sends "", "lightgbm", or "baseline"
+    model_type: str | None = "linear"  # final internal value: "linear", "gboost", or "rf"
+    neutral_field: bool = False  # currently ignored, but accepted
 
     @field_validator("season", "start_season", "end_season")
     @classmethod
@@ -61,9 +62,20 @@ class PredictRequest(BaseModel):
     @field_validator("model_type")
     @classmethod
     def check_model_type(cls, v: str | None) -> str:
+        # Map frontend options to internal model names
         if v is None or v == "":
+            # frontend "(default)" => linear
             return "linear"
+
         v = v.lower()
+
+        # Map older frontend names to current model keys
+        if v == "lightgbm":
+            return "gboost"   # gradient-boosting model
+        if v == "baseline":
+            return "linear"   # treat baseline as linear model
+
+        # Directly allow our internal names too
         if v not in ("linear", "gboost", "rf"):
             raise ValueError("model_type must be 'linear', 'gboost', or 'rf'.")
         return v

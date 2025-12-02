@@ -1,7 +1,9 @@
-const API_BASE = "https://scorebot-bc8z.onrender.com";
-const PREDICT_ENDPOINT = "/predict"; // change if your route is different
-const BACKEND_URL = "https://scorebot-bc8z.onrender.com";
-
+// Use same-origin backend by default.
+// When deployed on Render, this will be your Render URL.
+// When running locally via `uvicorn backend.app:app` and visiting http://127.0.0.1:8000,
+// this will be http://127.0.0.1:8000.
+const API_BASE = window.location.origin;
+const PREDICT_ENDPOINT = "/predict";
 
 const TEAMS = [
   "ARI",
@@ -90,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modelType = document.getElementById("model-type").value || null;
     const neutralField = document.getElementById("neutral-field").checked;
 
-    // *** EDIT THIS TO MATCH YOUR FASTAPI PREDICTION MODEL ***
+    // Payload expected by FastAPI backend; extra fields are ignored server-side.
     const payload = {
       home_team: home,
       away_team: away,
@@ -120,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       rawJson.textContent = JSON.stringify(data, null, 2);
 
-      // Try to pull out common keys if they exist
+      // We don't have explicit predicted scores yet, so keep "?"
       const hs =
         data.home_score ??
         data.predicted_home_score ??
@@ -143,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         awayScore.textContent = "?";
       }
 
-      // Optional: win probability if present
+      // Win probability if present
       const winProbHome =
         data.home_win_prob ??
         data.win_prob_home ??
@@ -153,6 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (winProbHome !== null) {
         const pct = (winProbHome * 100).toFixed(1);
         extraInfo.textContent = `Home win probability: ${pct}%`;
+      } else {
+        extraInfo.textContent = "";
       }
 
       scoreCard.classList.remove("hidden");
